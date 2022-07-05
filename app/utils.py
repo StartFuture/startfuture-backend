@@ -1,6 +1,7 @@
 import re
 import os
-from dotenv import load_dotenv
+import string
+import random
 
 
 def check(user):
@@ -107,30 +108,13 @@ def date_conversor(start_date, final_date):
     start_date = datetime.strptime(start_date.replace('/','-'), '%d-%m-%Y').date()
     final_date = datetime.strptime(final_date.replace('/','-'), '%d-%m-%Y').date()
     return start_date, final_date
-    
 
-def send_email(client_email, cod):
-    load_dotenv()
-    senha = os.environ.get("SENHA")
-    corpo_email = f"""
-    <h1>Ola,</h1>
-    <h1>Seu código de verificação é:</h1>
-    <h2>{cod}</h2>
-    """
-
-    msg = email.message.Message()
-    msg['Subject'] = "Código de verificação"
-    msg['From'] = 'WorkStation.box.email@gmail.com'
-    msg['To'] = client_email
-    password = senha
-    msg.add_header('Content-Type', 'text/html')
-    msg.set_payload(corpo_email )
-
-    if password:
-        s = smtplib.SMTP('smtp.gmail.com: 587')
-        s.starttls()
-        # Login Credentials for sending the mail
-        s.login(msg['From'], password)
-        s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
-        print('Email enviado')
-    
+def generate_password_code(size_block = 5, qtd_blocks = 4, split_by = '-'):
+  str_all_char_available = string.ascii_uppercase + string.digits
+  blocks = []
+  for item in range(qtd_blocks):
+    block = [random.choice(str_all_char_available) for num in range(size_block)]
+    block_join = ''.join(block)
+    blocks.append(block_join)
+  str_blocks = split_by.join(blocks)
+  return str_blocks
