@@ -2,28 +2,13 @@ import re
 import os
 import string
 import random
+from datetime import datetime
 
-
-def check(user):
+def verify_email_valid(user):
     return bool(re.match(r"[a-zA-Z0-9]+@[a-z]+.[a-z]+.?b?r?", user))
 
-
-def validates(email, cpf, data):
-    c = 0
-
-    if validates_cpf(cpf):
-        c += 1
-
-    if re.match(r"[a-zA-Z0-9]+@[a-z]+.[a-z]+.?b?r?", email):
-        c += 1
-
-    if re.match(r"[0-9]{2}/[0-9]{2}/[0-9]{4}", data):
-        c += 1
-
-    if c == 3:
-        return True
-    return False
-
+def verify_cpf_valid(user):
+    return bool(re.match(r"[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}", user))
 
 def validates_cpf(cpf):
     if len(cpf) != 11:
@@ -46,23 +31,6 @@ def validates_cpf(cpf):
     novo_cpf += segundo_digito
     
     return novo_cpf == cpf
-
-
-def validates_pj(email, cnpj, data):
-    c = 0
-
-    if validates_cnpj(cnpj):
-        c += 1
-
-    if re.match(r"[a-zA-Z0-9]+@[a-z]+.[a-z]+.?b?r?", email):
-        c += 1
-
-    if re.match(r"[0-9]{2}/[0-9]{2}/[0-9]{4}", data):
-        c += 1
-
-    if c == 3:
-        return True
-    return False
 
 
 def validates_cnpj(cnpj):
@@ -98,23 +66,12 @@ def validates_cnpj(cnpj):
 
     return new_cnpj == cnpj
 
-
-def is_cpf(user):
-    return bool(re.match(r"[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}", user))
-
-
-def date_conversor(start_date, final_date):
-    from datetime import datetime
-    start_date = datetime.strptime(start_date.replace('/','-'), '%d-%m-%Y').date()
-    final_date = datetime.strptime(final_date.replace('/','-'), '%d-%m-%Y').date()
-    return start_date, final_date
-
-def generate_password_code(size_block = 5, qtd_blocks = 4, split_by = '-'):
-  str_all_char_available = string.ascii_uppercase + string.digits
-  blocks = []
-  for item in range(qtd_blocks):
-    block = [random.choice(str_all_char_available) for num in range(size_block)]
-    block_join = ''.join(block)
-    blocks.append(block_join)
-  str_blocks = split_by.join(blocks)
-  return str_blocks
+def generate_hash_code(size_block = 5, qtd_blocks = 4, split_by = '-'):
+    str_all_char_available = string.ascii_uppercase + string.digits
+    blocks = []
+    for item in range(qtd_blocks):
+        block = [random.choice(str_all_char_available) for num in range(size_block)]
+        block_join = ''.join(block)
+        blocks.append(block_join)
+    str_blocks = split_by.join(blocks)
+    return str_blocks
