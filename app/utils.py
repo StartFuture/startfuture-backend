@@ -75,3 +75,6 @@ def generate_hash_code(size_block = 5, qtd_blocks = 4, split_by = '-'):
         blocks.append(block_join)
     str_blocks = split_by.join(blocks)
     return str_blocks
+
+if __name__ == '__main__':
+    print(generate_hash_code())
